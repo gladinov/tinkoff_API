@@ -21,5 +21,5 @@ print(df_all.columns)
 df_ticker = df_all[df_all['ticker'] == ticker]
 print(df_ticker[['ticker','date','type','otype','quantity']])
 
-# for index, row in df_ticker.iterrows():
-#     if
+for index, row in df_ticker.iterrows():
+    print(index, row)
