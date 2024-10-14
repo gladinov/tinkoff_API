@@ -17,9 +17,22 @@ df_op_2 = pd.read_sql_query("SELECT * FROM bond_operations_acc_2016119489", conn
 df_all = pd.concat([df_op_1, df_op_2], ignore_index=True).sort_values(by='date',
                                                              ascending=False)
 
-print(df_all.columns)
-df_ticker = df_all[df_all['ticker'] == ticker]
-print(df_ticker[['ticker','date','type','otype','quantity']])
 
+df_ticker = df_all[df_all['ticker'] == ticker].sort_values(by='date',ascending=True)
+df_ticker = df_ticker[df_ticker.otype.isin([15,22])]
+# df_ticker['nkd'] = (-df.payment - df.price * df.quantity)
+df_ticker['nkd'] = (abs(df_ticker['payment']) - df_ticker['price'] * df_ticker['quantity'])
+
+print(df_ticker.columns)
+print(df_ticker[['date', 'type', 'otype', 'quantity', 'payment', 'price', 'nkd']])
+
+operations = []
 for index, row in df_ticker.iterrows():
-    print(index, row)
+    print((row['price'], row['quantity']))
+
+    # if row['otype'] == 15:
+    #     operations.append((row['price'], row['quantity']))
+    # if row['otype'] == 22:
+    #     operations.append((row['price'], -row['quantity']))
+
+print(operations)
